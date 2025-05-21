@@ -8,20 +8,12 @@ function App() {
   const [img, setimg] = useState(greenLight);
   const [time, settime] = useState();
   const counter = useRef(null)
-  const image = useRef(null)
 
   let intervalId ; 
   let num; 
 
   useEffect(() => {
-    counter.current.innerText = "please wait"
-    image.current.src = redLight;
-    image.current.src = yellowLight;
-    image.current.src = greenLight;
-    setTimeout(() => {
-    counter.current.innerText = ""
-      greenCount();
-    }, 2000);
+    greenCount();
   }, []);
 
   function greenCount() {
@@ -97,7 +89,7 @@ function App() {
     <>
       <div className="container">
         <div className="img-main">
-          <img className="image" ref={image} src={img} alt="traffic-light" />
+          <img className="image" src={img} alt="traffic-light" />
         </div>
         <div className="counter-main">
           <p className="counter" ref={counter}>{time}</p>
