@@ -5,16 +5,23 @@ import yellowLight from "./asset/yellowLight.jpg";
 import { useRef } from "react";
 
 function App() {
-  const [state, setstate] = useState("green");
   const [img, setimg] = useState(greenLight);
   const [time, settime] = useState();
   const counter = useRef(null)
+  const image = useRef(null)
 
   let intervalId ; 
   let num; 
 
   useEffect(() => {
-    greenCount();
+    counter.current.innerText = "please wait"
+    image.current.src = redLight;
+    image.current.src = yellowLight;
+    image.current.src = greenLight;
+    setTimeout(() => {
+    counter.current.innerText = ""
+      greenCount();
+    }, 2000);
   }, []);
 
   function greenCount() {
@@ -23,7 +30,6 @@ function App() {
     setTimeout(() => {
       setimg(yellowLight);
       clearInterval(intervalId)
-      setstate("yellow");
       yellowCount("green");
     }, 9000);
   }
@@ -32,12 +38,10 @@ function App() {
     colorCounter("yellow")
     setTimeout(() => {
       if(pervius == "green"){
-      setstate("red");
       clearInterval(intervalId)
       setimg(redLight);
       redCount();
       }else if(pervius == "red"){
-        setstate("green");
         clearInterval(intervalId)
         setimg(greenLight);
         greenCount()
@@ -50,7 +54,6 @@ function App() {
     setTimeout(() => {
       setimg(yellowLight);
       clearInterval(intervalId)
-      setstate("yellow");
       yellowCount("red");
     }, 11000);
   }
@@ -94,7 +97,7 @@ function App() {
     <>
       <div className="container">
         <div className="img-main">
-          <img className="image" src={img} alt="traffic-light" />
+          <img className="image" ref={image} src={img} alt="traffic-light" />
         </div>
         <div className="counter-main">
           <p className="counter" ref={counter}>{time}</p>
