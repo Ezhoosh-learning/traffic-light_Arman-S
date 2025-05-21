@@ -1,0 +1,107 @@
+import { useEffect, useState } from "react";
+import greenLight from "./asset/greenLight.jpg";
+import redLight from "./asset/redLight.jpg";
+import yellowLight from "./asset/yellowLight.jpg";
+import { useRef } from "react";
+
+function App() {
+  const [state, setstate] = useState("green");
+  const [img, setimg] = useState(greenLight);
+  const [time, settime] = useState();
+  const counter = useRef(null)
+
+  let intervalId ; 
+  let num; 
+
+  useEffect(() => {
+    greenCount();
+  }, []);
+
+  function greenCount() {
+    timer("green")
+    colorCounter("green")
+    setTimeout(() => {
+      setimg(yellowLight);
+      clearInterval(intervalId)
+      setstate("yellow");
+      yellowCount("green");
+    }, 9000);
+  }
+  function yellowCount(pervius) {
+    timer("yellow")
+    colorCounter("yellow")
+    setTimeout(() => {
+      if(pervius == "green"){
+      setstate("red");
+      clearInterval(intervalId)
+      setimg(redLight);
+      redCount();
+      }else if(pervius == "red"){
+        setstate("green");
+        clearInterval(intervalId)
+        setimg(greenLight);
+        greenCount()
+      }
+    }, 4000);
+  }
+  function redCount() {
+    timer("red")
+    colorCounter("red")
+    setTimeout(() => {
+      setimg(yellowLight);
+      clearInterval(intervalId)
+      setstate("yellow");
+      yellowCount("red");
+    }, 11000);
+  }
+
+  function formatTime(n){
+    if (n < 10)
+    return "00"+ ":" + "0" + n;
+
+    if(n<0)
+    return "00:00";
+
+    return "00:" + n
+    
+  }
+
+    function colorCounter(color){
+      if(color == "green"){
+      counter.current.style.color = "#46D365"
+      }else if(color == "yellow"){
+      counter.current.style.color = "#F6D201"
+      }else if(color == "red"){
+      counter.current.style.color = "#F02E2F"
+      }
+    }
+  function timer(color){
+    num = 0
+    intervalId = setInterval(() => {
+      if(color == "green"){
+        settime(formatTime(8-num))
+        num++
+      }else if(color == "yellow"){
+        settime(formatTime(3-num))
+        num++
+      }else if(color == "red"){
+        settime(formatTime(10-num))
+        num++
+      }
+    }, 1000);
+  }
+  return (
+    <>
+      <div className="container">
+        <div className="img-main">
+          <img className="image" src={img} alt="traffic-light" />
+        </div>
+        <div className="counter-main">
+          <p className="counter" ref={counter}>{time}</p>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default App;
